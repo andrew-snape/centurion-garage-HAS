@@ -1,0 +1,10 @@
+{
+  "domain": "centurion",
+  "name": "Centurion Garage Door",
+  "version": "0.9.0",
+  "documentation": "https://github.com/andrew-snape/centurion-garage-HAS",
+  "requirements": [],
+  "codeowners": ["@andrew-snape"],
+  "config_flow": true,
+  "iot_class": "local_polling"
+}
