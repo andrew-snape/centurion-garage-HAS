@@ -1,0 +1,14 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configure Centurion Garage Door",
+        "description": "Enter the IP address and API key of your Centurion controller.",
+        "data": {
+          "ip_address": "IP Address",
+          "api_key": "API Key"
+        }
+      }
+    }
+  }
+}
