@@ -30,6 +30,15 @@ class CenturionGarageDoor(CoverEntity):
             "model": "Smart Garage"
         }
 
+    @property
+    def device_class(self):
+        return "garage"
+
+    @property
+    def supported_features(self):
+        # OPEN, CLOSE, STOP
+        return 7
+
     def update(self):
         try:
             url = f"{self._base_url()}&status=json"
