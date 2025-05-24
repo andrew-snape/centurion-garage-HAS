@@ -1,38 +1,22 @@
 # Centurion Garage Door Integration for Home Assistant
 
-This is a custom integration for controlling **Centurion smart garage doors** using the **local API** available via the MY CGD app.
+A custom integration for controlling Centurion smart garage doors and accessories via the local API.
 
-It allows local, cloud-free control of:
-- 🚪 Garage door (open, close, stop)
-- 💡 Internal lamp
-- 🏖 Vacation mode
-- 📷 MJPEG camera stream (from port `88`)
+**What's new in 0.9.6:**  
+- State for lamp, vacation, and door syncs automatically from controller API
+- Entity icons and device info
+- Door entity maps open/closed/opening/closing/stopped/error correctly for Home Assistant
+- Configurable polling interval (default 30s)
 
----
+## Features
+- Open, close, and stop the garage door
+- Toggle lamp and vacation mode
+- All configuration through Home Assistant UI (no YAML required)
+- Reliable local control (no cloud, no camera, no HACS)
 
-## ✅ Features
+## How to install
+1. Copy `custom_components/centurion/` to your Home Assistant config folder.
+2. Restart Home Assistant.
+3. Add the Centurion integration via "Devices & Services".
 
-- Control your garage door directly from Home Assistant
-- Toggle the Centurion lamp and vacation mode
-- View the built-in camera stream via MJPEG
-- UI-based setup — **no YAML required**
-- Local API — no cloud services or internet dependency
-
----
-
-## 🧩 Entities Created
-
-| Entity Type | Description              | Example Entity ID                  |
-|-------------|--------------------------|------------------------------------|
-| `cover`     | Garage door              | `cover.centurion_garage_door`     |
-| `switch`    | Internal lamp            | `switch.centurion_garage_lamp`    |
-| `switch`    | Vacation mode            | `switch.centurion_vacation_mode`  |
-| `camera`    | MJPEG stream (port 88)   | `camera.centurion_garage_camera`  |
-
----
-
-## 📦 Installation via HACS
-
-### Step 1: Add as a Custom Repository
-1. In Home Assistant, go to **HACS → Integrations → ⋮ → Custom repositories**
-2. Enter the repo URL:
+MIT License — Developed by Andrew Snape

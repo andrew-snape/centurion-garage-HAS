@@ -1,7 +1,7 @@
 import logging
 import requests
 from homeassistant.components.cover import CoverEntity
-from homeassistant.const import STATE_CLOSED, STATE_OPEN
+from homeassistant.const import STATE_CLOSED, STATE_OPEN, STATE_OPENING, STATE_CLOSING
 from .const import DOMAIN, CONF_IP_ADDRESS, CONF_API_KEY
 
 _LOGGER = logging.getLogger(__name__)
@@ -21,20 +21,39 @@ class CenturionGarageDoor(CoverEntity):
     def _base_url(self):
         return f"http://{self._ip}/api?key={self._api_key}"
 
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self._ip)},
+            "name": "Centurion Garage Door",
+            "manufacturer": "Centurion",
+            "model": "Smart Garage"
+        }
+
     def update(self):
         try:
             url = f"{self._base_url()}&status=json"
             _LOGGER.debug(f"Fetching door status from: {url}")
             response = requests.get(url, timeout=5)
             data = response.json()
-            door_state = data.get("door", "").lower()
+            door_state = str(data.get("door", "")).lower()
             _LOGGER.debug(f"Centurion returned door state: {door_state}")
-            if door_state == "open":
+
+            if "opening" in door_state:
+                self._state = STATE_OPENING
+            elif "closing" in door_state:
+                self._state = STATE_CLOSING
+            elif "open" in door_state:
                 self._state = STATE_OPEN
-            elif door_state == "closed":
+            elif "close" in door_state:
                 self._state = STATE_CLOSED
+            elif "stopped" in door_state or "error" in door_state:
+                self._state = None
+                _LOGGER.warning(f"Door in stopped/error state: {door_state}")
             else:
                 _LOGGER.warning(f"Unexpected door state: {door_state}")
+                self._state = None
+
         except Exception as e:
             _LOGGER.error(f"Error updating Centurion door status: {e}")
 
