@@ -1,7 +1,7 @@
 {
   "domain": "centurion",
   "name": "Centurion Garage Door",
-  "version": "0.9.1",
+  "version": "0.9.5",
   "documentation": "https://github.com/andrew-snape/centurion-garage-HAS",
   "issue_tracker": "https://github.com/andrew-snape/centurion-garage-HAS/issues",
   "requirements": [],
