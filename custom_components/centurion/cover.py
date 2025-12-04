@@ -1,15 +1,19 @@
 import logging
+
 import requests
 from homeassistant.components.cover import CoverEntity
 from homeassistant.const import STATE_CLOSED, STATE_OPEN, STATE_OPENING, STATE_CLOSING
+
 from .const import DOMAIN, CONF_IP_ADDRESS, CONF_API_KEY
 
 _LOGGER = logging.getLogger(__name__)
+
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     ip = config_entry.data[CONF_IP_ADDRESS]
     api_key = config_entry.data[CONF_API_KEY]
     async_add_entities([CenturionGarageDoor(ip, api_key)], update_before_add=True)
+
 
 class CenturionGarageDoor(CoverEntity):
     def __init__(self, ip, api_key):
@@ -42,11 +46,11 @@ class CenturionGarageDoor(CoverEntity):
     def update(self):
         try:
             url = f"{self._base_url()}&status=json"
-            _LOGGER.debug(f"Fetching door status from: {url}")
+            _LOGGER.debug("Fetching door status from: %s", url)
             response = requests.get(url, timeout=5)
             data = response.json()
             door_state = str(data.get("door", "")).lower()
-            _LOGGER.debug(f"Centurion returned door state: {door_state}")
+            _LOGGER.debug("Centurion returned door state: %s", door_state)
 
             if "opening" in door_state:
                 self._state = STATE_OPENING
@@ -58,13 +62,13 @@ class CenturionGarageDoor(CoverEntity):
                 self._state = STATE_CLOSED
             elif "stopped" in door_state or "error" in door_state:
                 self._state = None
-                _LOGGER.warning(f"Door in stopped/error state: {door_state}")
+                _LOGGER.warning("Door in stopped/error state: %s", door_state)
             else:
-                _LOGGER.warning(f"Unexpected door state: {door_state}")
+                _LOGGER.warning("Unexpected door state: %s", door_state)
                 self._state = None
 
         except Exception as e:
-            _LOGGER.error(f"Error updating Centurion door status: {e}")
+            _LOGGER.error("Error updating Centurion door status: %s", e)
 
     @property
     def name(self):
@@ -80,22 +84,22 @@ class CenturionGarageDoor(CoverEntity):
 
     def open_cover(self, **kwargs):
         try:
-            requests.get(f"{self._base_url()}&door=open")
+            requests.get(f"{self._base_url()}&door=open", timeout=5)
             self._state = STATE_OPEN
             self.schedule_update_ha_state()
         except Exception as e:
-            _LOGGER.error(f"Error sending open command: {e}")
+            _LOGGER.error("Error sending open command: %s", e)
 
     def close_cover(self, **kwargs):
         try:
-            requests.get(f"{self._base_url()}&door=close")
+            requests.get(f"{self._base_url()}&door=close", timeout=5)
             self._state = STATE_CLOSED
             self.schedule_update_ha_state()
         except Exception as e:
-            _LOGGER.error(f"Error sending close command: {e}")
+            _LOGGER.error("Error sending close command: %s", e)
 
     def stop_cover(self, **kwargs):
         try:
-            requests.get(f"{self._base_url()}&door=stop")
+            requests.get(f"{self._base_url()}&door=stop", timeout=5)
         except Exception as e:
-            _LOGGER.error(f"Error sending stop command: {e}")
+            _LOGGER.error("Error sending stop command: %s", e)

@@ -1,10 +1,13 @@
-import requests
 from datetime import timedelta
+
+import requests
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.entity import DeviceInfo
+
 from .const import CONF_IP_ADDRESS, CONF_API_KEY, DOMAIN
 
 SCAN_INTERVAL = timedelta(seconds=30)
+
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     ip = config_entry.data[CONF_IP_ADDRESS]
@@ -13,6 +16,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         CenturionLampSwitch(ip, api_key),
         CenturionVacationSwitch(ip, api_key)
     ])
+
 
 class CenturionBaseSwitch(SwitchEntity):
     def __init__(self, ip, api_key):
@@ -26,11 +30,12 @@ class CenturionBaseSwitch(SwitchEntity):
     @property
     def device_info(self):
         return DeviceInfo(
-            identifiers = {(DOMAIN, self._ip)},
-            name = "Centurion Garage Door",
-            manufacturer = "Centurion",
-            model = "Smart Garage"
+            identifiers={(DOMAIN, self._ip)},
+            name="Centurion Garage Door",
+            manufacturer="Centurion",
+            model="Smart Garage"
         )
+
 
 class CenturionLampSwitch(CenturionBaseSwitch):
     def __init__(self, ip, api_key):
@@ -47,12 +52,12 @@ class CenturionLampSwitch(CenturionBaseSwitch):
         return "mdi:lightbulb"
 
     def turn_on(self, **kwargs):
-        requests.get(f"{self._base_url()}&lamp=on")
+        requests.get(f"{self._base_url()}&lamp=on", timeout=5)
         self._is_on = True
         self.schedule_update_ha_state()
 
     def turn_off(self, **kwargs):
-        requests.get(f"{self._base_url()}&lamp=off")
+        requests.get(f"{self._base_url()}&lamp=off", timeout=5)
         self._is_on = False
         self.schedule_update_ha_state()
 
@@ -63,6 +68,7 @@ class CenturionLampSwitch(CenturionBaseSwitch):
             self._is_on = str(data.get("lamp", "off")).lower() == "on"
         except Exception:
             self._is_on = False
+
 
 class CenturionVacationSwitch(CenturionBaseSwitch):
     def __init__(self, ip, api_key):
@@ -79,12 +85,12 @@ class CenturionVacationSwitch(CenturionBaseSwitch):
         return "mdi:beach"
 
     def turn_on(self, **kwargs):
-        requests.get(f"{self._base_url()}&vacation=on")
+        requests.get(f"{self._base_url()}&vacation=on", timeout=5)
         self._is_on = True
         self.schedule_update_ha_state()
 
     def turn_off(self, **kwargs):
-        requests.get(f"{self._base_url()}&vacation=off")
+        requests.get(f"{self._base_url()}&vacation=off", timeout=5)
         self._is_on = False
         self.schedule_update_ha_state()
 

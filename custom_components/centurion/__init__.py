@@ -1,7 +1,8 @@
-from .const import DOMAIN
 import asyncio
 
+
 PLATFORMS = ["cover", "switch"]
+
 
 async def async_setup_entry(hass, config_entry):
     for platform in PLATFORMS:
@@ -9,6 +10,7 @@ async def async_setup_entry(hass, config_entry):
             hass.config_entries.async_forward_entry_setup(config_entry, platform)
         )
     return True
+
 
 async def async_unload_entry(hass, config_entry):
     return all(

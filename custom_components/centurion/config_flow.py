@@ -1,6 +1,8 @@
 from homeassistant import config_entries
 import voluptuous as vol
+
 from .const import DOMAIN, CONF_IP_ADDRESS, CONF_API_KEY
+
 
 class CenturionConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
