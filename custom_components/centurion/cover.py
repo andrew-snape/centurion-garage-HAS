@@ -82,7 +82,7 @@ class CenturionGarageDoor(CoverEntity):
         try:
             requests.get(f"{self._base_url()}&door=open")
             self._state = STATE_OPEN
-            # self.schedule_update_ha_state()
+            self.schedule_update_ha_state()
         except Exception as e:
             _LOGGER.error(f"Error sending open command: {e}")
 
@@ -90,7 +90,7 @@ class CenturionGarageDoor(CoverEntity):
         try:
             requests.get(f"{self._base_url()}&door=close")
             self._state = STATE_CLOSED
-            # self.schedule_update_ha_state()
+            self.schedule_update_ha_state()
         except Exception as e:
             _LOGGER.error(f"Error sending close command: {e}")
 
