@@ -49,7 +49,6 @@ class CenturionLampSwitch(CenturionBaseSwitch):
     def turn_on(self, **kwargs):
         requests.get(f"{self._base_url()}&lamp=on")
         self._is_on = True
-        # not doing update immediately to avoid switch snapping back
         self.schedule_update_ha_state()
 
     def turn_off(self, **kwargs):
